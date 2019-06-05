@@ -86,26 +86,17 @@
         return true
       }
       return false
-      // for (var row in this.attributes) {
-      //   var sum = this.attributes.row.reduce((acc, curVal) => return acc+curVal);
-      //   if (sum > 1) {
-      //     return true
-      //   }
-      // }
-      // return false;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      //console.log(this.attributes)
       for (var i=0; i<4; i++) {
         if (this.hasRowConflictAt(i)) {
           return true
         }
       }
       return false;
-      //console.log(this.attributes['0'])
-     // fixme
+
     },
 
 
@@ -115,11 +106,36 @@
     //
     // test if a specific column on this board contains a conflict
     hasColConflictAt: function(colIndex) {
+      //initialize sum variable to 0
+      var board = this.attributes;
+      var sum = 0;
+      //iterate through properties (rows) of board object
+      for (var row in board) {
+        //check each property value at specified index
+        sum = sum + board[row][colIndex];
+        if (sum > 1) {
+          return true;
+        }
+      }
       return false; // fixme
     },
 
     // test if any columns on this board contain conflicts
     hasAnyColConflicts: function() {
+      /*
+      iterating through length of property value if board
+        run has col conflict on each index
+        if result of hasColConflict as is true
+          return true
+      return false
+      */
+     var length = this.attributes.n
+      for (var i = 0; i < length; i++) {
+        var result = this.hasColConflictAt(i);
+        if (result) {
+          return true;
+        }
+      }
       return false; // fixme
     },
 
