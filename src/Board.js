@@ -79,12 +79,33 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      return false; // fixme
+      var sum = this.attributes[rowIndex].reduce(function(acc, curVal) {
+        return acc + curVal;
+      });
+      if (sum > 1) {
+        return true
+      }
+      return false
+      // for (var row in this.attributes) {
+      //   var sum = this.attributes.row.reduce((acc, curVal) => return acc+curVal);
+      //   if (sum > 1) {
+      //     return true
+      //   }
+      // }
+      // return false;
     },
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      return false; // fixme
+      //console.log(this.attributes)
+      for (var i=0; i<4; i++) {
+        if (this.hasRowConflictAt(i)) {
+          return true
+        }
+      }
+      return false;
+      //console.log(this.attributes['0'])
+     // fixme
     },
 
 
@@ -144,5 +165,6 @@
       });
     });
   };
+
 
 }());
