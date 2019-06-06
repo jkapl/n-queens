@@ -146,13 +146,65 @@
     //
     // test if a specific major diagonal on this board contains a conflict
     hasMajorDiagonalConflictAt: function(majorDiagonalColumnIndexAtFirstRow) {
+      //initialize sum variable to 0
+      var sum = 0;
+      var n = this.attributes.n;
+      // store abs(argument) in variable called colIndex 
+      var colIndex = Math.abs(majorDiagonalColumnIndexAtFirstRow);
+      // if majorDiagonalColumnIndexAtFirstRow is positive or 0
+      if (majorDiagonalColumnIndexAtFirstRow >= 0) {
+        for (var i=0; i< n-colIndex; i++) {
+          sum = sum + this.get(i)[i + colIndex];
+          if (sum > 1) {
+            return true;
+        //  length of loop is equal to this.attributes.n(4) - colIndex(2)
+        //  add value of this.get(i)[i + colInd] to sum
+        // if sum greater than 1
+          // return true
+          }  
+        }
+      } else {
+        for (var i=0; i<n-colIndex; i++) {
+          sum = sum + this.get(i)[i]
+          if (sum > 1) {
+            return true;
+          }
+        }
+      }  
+          // length of loop is equal to this.attributes.n(4) - colIndex(2)
+          //  add value of this.get(i)[i] to sum
+          //if sum greater than 1
+          //   return true
       return false; // fixme
     },
+    
 
     // test if any major diagonals on this board contain conflicts
     hasAnyMajorDiagonalConflicts: function() {
+      var n = this.get('n');
+      var loopLength = (n*2)-1;
+      var startIndex = n-1;
+      for (var i=0; i<loopLength; i++) {
+        var result = this.hasMajorDiagonalConflictAt(startIndex - i);
+        if (result) {
+          return true;
+        }
+      }
+      /*
+      declare a variable called loopLength storing (n*2) -1
+      declare a variable called startingIndex (this.attributes.n)-1
+      iterate loopLength times
+        store variable result of calling hasMajorDiagonalConflictAt(startingIndex - i)
+        if variable is true
+          return true
+      */
       return false; // fixme
     },
+    /*
+    initialize sum variable to 0
+    loop over each row *use get method, this.get(i);*, the number of iterations will be equal to this.attributes.n - majorDiagonalColumnIndexAtFirstRow
+      
+     */
 
 
 
