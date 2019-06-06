@@ -165,7 +165,7 @@
         }
       } else {
         for (var i=0; i<n-colIndex; i++) {
-          sum = sum + this.get(i)[i]
+          sum = sum + this.get(colIndex + i)[i]
           if (sum > 1) {
             return true;
           }
