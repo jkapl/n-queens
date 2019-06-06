@@ -213,11 +213,60 @@
     //
     // test if a specific minor diagonal on this board contains a conflict
     hasMinorDiagonalConflictAt: function(minorDiagonalColumnIndexAtFirstRow) {
+      //declare a variable sum = 0
+      var sum = 0;
+      //declare a variable rowToStart
+      var rowToStart = 0;
+      //declare a variable colToStart
+      var colToStart;
+      var loopLength;
+      //if minorDiagonalColumnIndexAtFirstRow is less than this.attributes.n
+      if (minorDiagonalColumnIndexAtFirstRow < this.get('n')) {
+        //declare a variable looplength that is equal to (minorDiagonalColumnIndexAtFirstRow +1)
+        loopLength = minorDiagonalColumnIndexAtFirstRow + 1;
+      } else {
+        //else declare a variable looplength that is equal to n- ((minorDiagonalColumnIndexAtFirstRow - n) +1)
+        loopLength = this.get('n')-((minorDiagonalColumnIndexAtFirstRow - this.get('n')) +1);
+      }
+      if (minorDiagonalColumnIndexAtFirstRow < this.get('n')) {
+        //if minorDiagonalColumnIndexAtFirstRow is less than this.attributes.n, rowToStart = 0, colToStart is = minorDiagonalColumnIndexAtFirstRow
+        rowToStart = 0;
+        colToStart = minorDiagonalColumnIndexAtFirstRow;
+      } else {
+        //else rowToStart = 1 + (minorDiagonalColumnIndexAtFirstRow - this.attributes.n), colToStart is = this.attributes.n-1
+        rowToStart = 1 + (minorDiagonalColumnIndexAtFirstRow - this.get('n'));
+        colToStart = this.get('n')-1;
+      }
+        //for loop starting at 0 and ending at i<looplength
+        //sum = sum + this.get(rowToStart+i)[colToStart-i]
+        //if sum > 1
+        //return true
+      for (var i=0; i<loopLength; i++) {
+        sum = sum + this.get(rowToStart + i)[colToStart - i];
+        if (sum > 1) {
+          return true
+        }
+      }
       return false; // fixme
     },
 
     // test if any minor diagonals on this board contain conflicts
     hasAnyMinorDiagonalConflicts: function() {
+      //var argument = 0;
+      var argument = 0;
+      //var looplength = (n*2)-2
+      var loopLength = (this.get('n')*2)-1;
+      //for loop to looplength
+      for (var i=0; i<loopLength; i++) {
+        //var result = call hasMinorDiagonalConflictAt(argument + i)
+        var result = this.hasMinorDiagonalConflictAt(argument + i);
+        if (result) {
+          return true;
+        }
+      }
+        
+        //if result is true
+        // return true
       return false; // fixme
     }
 
