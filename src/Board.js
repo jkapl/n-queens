@@ -79,7 +79,7 @@
     //
     // test if a specific row on this board contains a conflict
     hasRowConflictAt: function(rowIndex) {
-      var sum = this.attributes[rowIndex].reduce(function(acc, curVal) {
+      var sum = this.get(rowIndex).reduce(function(acc, curVal) {
         return acc + curVal;
       });
       if (sum > 1) {
@@ -90,7 +90,7 @@
 
     // test if any rows on this board contain conflicts
     hasAnyRowConflicts: function() {
-      for (var i=0; i<4; i++) {
+      for (var i=0; i<this.get('n'); i++) {
         if (this.hasRowConflictAt(i)) {
           return true
         }

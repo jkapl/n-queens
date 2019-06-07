@@ -15,57 +15,64 @@
 
 
 
-window.findNRooksSolution = function(n) {
-  var solution = undefined; //fixme
-  //base case - no more spaces to put rooks
-  //base case - n rooks have been placed
-    // solution = board where n rooks are placed
-  //make a new board
-  var firstBoard = new this.Board({'n':n});
-  var recursiveRookHelper = function (arrayOfBoards) {
-    for (var i=0; i<arrayOfBoards.length; i++) {
-      arrayOfBoards.findNRooksSolution(n);
-    }
+window.findNRooksSolution = function(n, board) {
+  if (n === 1) {
+    var oneBoard = new Board({'n':1});
+    oneBoard.togglePiece(0,0);
+    return oneBoard.rows();
   }
-  //summing rows
-  function sumRows(board) {
+  var firstBoard = new Board({'n': n});
+  board = board || firstBoard;
+  function sumRows(childBoard) {
     var sum = 0;
-    sum = board.get(0).reduce((acc,curVal) => acc + curVal) +
-    board.get(1).reduce((acc,curVal) => acc + curVal) +
-    board.get(2).reduce((acc,curVal) => acc + curVal) +
-    board.get(3).reduce((acc,curVal) => acc + curVal);
-    return sum
+    for (var i=0; i<n; i++) {
+      sum = sum + childBoard.get(i).reduce(function (acc, curVal) {
+        return acc + curVal;
+      })
+    }
+    return sum;
   }
-  //populating array with boards
-  while (firstBoard._changes.length < n*n) {
-    //put n*n number of empty boards in _changes array
-    var newBoard = new this.Board({'n':n});
-    firstBoard._changes.push(newBoard);
-  }
-  //loop through and toggle all boards in _changes array
-  var count = 0;
-    for (var j=0; j<4; j++) {
-      for (var k=0; k<4; k++) {
-        //toggle each spot
-        firstBoard._changes[count].togglePiece(j,k);
-        count++
-        recursiveRookHelper(firstBoard._changes);
-        //run checks
-        // testFunction(firstBoard._changes[count])
-        //check number of rooks placed
-        if (sumRows(firstBoard._changes[count]) === n) {
-          solution = firstBoard._changes[count];
+  function rowToggler(board) {
+    var rows = board.rows();
+    for (var i=0; i<rows.length; i++) {
+      for (var j=0; j<rows.length; j++) {
+        if (rows[i][j] === 0) {
+          board.togglePiece(i,j);
+          break;
         }
       }
     }
+  }
+  //populating array with boards
+  var totalLength = n*n;
+  while (board._changes.length < totalLength) {
+    //put n*n number of empty boards in _changes array
+    // var newBoard = new Board({'n': n});
+    var newBoard = board.clone();
+    board._changes.push(newBoard);
+  }
 
-  // var testFunction = function (board) {
-  //   if ((board.hasAnyRowConflicts() || board.hasAnyColConflicts()) {
+  for (var i=0; i<board._changes.length; i++) {
+    rowToggler(board._changes[i]);
+  }
 
-  //   }
-  // }
-  console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
-  return solution;
+
+    for (var i=0; i<board._changes.length; i++) {
+      if ((board._changes[i].hasAnyRowConflicts()) || (board._changes[i].hasAnyColConflicts())) {
+        board._changes.splice(i,1);
+      }
+      
+      if (sumRows(board._changes[i]) === n) {
+        debugger;
+        var solution = board._changes[i].rows();
+        console.log('Single solution for ' + n + ' rooks:', JSON.stringify(solution));
+        return solution;
+      }
+    }
+    for (var i=0; i<board._changes.length; i++) {
+      return findNRooksSolution(n, board._changes[i]);
+    }
+    return findNRooksSolution(n);
 };
 
 // return the number of nxn chessboards that exist, with n rooks placed such that none of them can attack each other
